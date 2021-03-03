@@ -12,6 +12,7 @@ require("dotenv").config();
 const authRouter = require("./routes/auth.router");
 const usersRouter = require("./routes/users.router");
 const projectsRouter = require("./routes/projects.router");
+const spotifyRouter = require('./routes/spotify.router');
 
 // MONGOOSE CONNECTION
 mongoose
@@ -50,6 +51,9 @@ app.use(
   })
 );
 
+
+
+
 // MIDDLEWARE
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -62,6 +66,8 @@ app.use("/auth", authRouter);
 
 app.use("/api/users", usersRouter);
 app.use("/api/projects", projectsRouter);
+app.use("/api/spotify", spotifyRouter);
+
 
 // ERROR HANDLING
 //  Catch 404 and respond with error message
