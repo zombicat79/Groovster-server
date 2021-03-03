@@ -27,10 +27,8 @@ router.post('/signup', isNotLoggedIn, validateAuthData, async (req, res, next) =
 
     const salt = await bcrypt.genSalt(saltRounds);
     const hashPass = await bcrypt.hash(password, salt);
-    
+
     const newUser = await User.create({ username, password: hashPass, email });
-    
-    console.log("we get here");
 
     newUser.password = "*";
 
