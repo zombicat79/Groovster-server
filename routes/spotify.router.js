@@ -18,7 +18,21 @@ spotifyApi
     console.log("Something went wrong when retrieving an access token", error)
   );
 
-// Main - input form - Search Artist
+// GET AN ARTIST
+router.get("/:artistId", (req, res, next) => {
+  const { artistId } = req.params;
+
+  spotifyApi.getArtist(artistId)
+  .then((data) => {
+    res
+    .status(201)
+    .json(data)
+  })
+  .catch((err) => next(err));
+})
+ 
+
+// Main - input form
 router.post("/main", (req, res, next) => {
   const { search } = req.body;
   spotifyApi
