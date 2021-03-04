@@ -11,7 +11,7 @@ require("dotenv").config();
 
 const authRouter = require("./routes/auth.router");
 const usersRouter = require("./routes/users.router");
-const projectsRouter = require("./routes/projects.router");
+const eventsRouter = require("./routes/events.router");
 const spotifyRouter = require('./routes/spotify.router');
 
 // MONGOOSE CONNECTION
@@ -65,7 +65,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/auth", authRouter);
 
 app.use("/api/users", usersRouter);
-app.use("/api/projects", projectsRouter);
+app.use("/api/events", eventsRouter);
 app.use("/api/spotify", spotifyRouter);
 
 

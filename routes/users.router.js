@@ -21,9 +21,10 @@ router.get('/:id', isLoggedIn, (req, res, next) => {
 // PUT '/api/users/:id'
 router.put('/:id', isLoggedIn, (req, res, next) => {
     const { id } = req.params;
-    const { username, email } = req.body;
+    console.log(req.body)
+    // const { username, email, preferences} = req.body;
 
-    User.findByIdAndUpdate(id, { username, email })
+    User.findByIdAndUpdate(id, req.body)
     .then( (selectedUser) => {
         res
         .status(201)
