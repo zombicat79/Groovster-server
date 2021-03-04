@@ -7,74 +7,80 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const User = require("../models/user.model");
 
-
-
 // HELPER FUNCTIONS
-const { isLoggedIn, isNotLoggedIn, validateAuthData } = require("../helpers/middleware");
-
-
+const {
+  isLoggedIn,
+  isNotLoggedIn,
+  validateAuthData,
+} = require("../helpers/middleware");
 
 // POST '/auth/signup'
-router.post('/signup', isNotLoggedIn, validateAuthData, async (req, res, next) => {
-  try {
-    const { username, password, email } = req.body;
+router.post(
+  "/signup",
+  isNotLoggedIn,
+  validateAuthData,
+  async (req, res, next) => {
+    try {
+      const { username, password, email } = req.body;
 
-    const user = await User.findOne({ username });
+      const user = await User.findOne({ username });
 
-    if (user) { 
-      return next(createError(400)); // Bad Request
+      if (user) {
+        return next(createError(400)); // Bad Request
+      }
+
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashPass = await bcrypt.hash(password, salt);
+
+      const newUser = await User.create({
+        username,
+        password: hashPass,
+        email,
+      });
+
+      newUser.password = "*";
+
+      req.session.currentUser = newUser; // triggers the creation of session and the cookie with session id
+
+      res
+        .status(201) // Created
+        .json(newUser);
+    } catch (error) {
+      next(createError(error)); // Internal Server Error (by default)
     }
-
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashPass = await bcrypt.hash(password, salt);
-
-    const newUser = await User.create({ username, password: hashPass, email });
-
-    newUser.password = "*";
-
-    req.session.currentUser = newUser; // triggers the creation of session and the cookie with session id
-
-    res
-      .status(201) // Created
-      .json(newUser);
-
-
-  } catch (error) {
-    next( createError(error) );  // Internal Server Error (by default)
   }
-})
-
-
-
+);
 
 // POST '/auth/login'
-router.post('/login', isNotLoggedIn, validateAuthData, async (req, res, next) => {
-  try {
-    const { username, password } = req.body;
-    
-    const user = await User.findOne({ username });
-    if (!user) return next(createError(404));  // Bad Request
+router.post(
+  "/login",
+  isNotLoggedIn,
+  validateAuthData,
+  async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
 
-    const passwordCorrect = await bcrypt.compare(password, user.password);
+      const user = await User.findOne({ username });
+      if (!user) return next(createError(404)); // Bad Request
 
-    if (passwordCorrect) {
-      user.password = '*';
-      req.session.currentUser = user;
+      const passwordCorrect = await bcrypt.compare(password, user.password);
 
-      res.status(200).json(user);
+      if (passwordCorrect) {
+        user.password = "*";
+        req.session.currentUser = user;
+
+        res.status(200).json(user);
+      } else {
+        next(createError(401)); // Unauthorized
+      }
+    } catch (error) {
+      next(createError(error)); // 500 Internal Server Error (by default)
     }
-    else {
-      next(createError(401)); // Unauthorized
-    }
-
-  } catch (error) {
-    next( createError(error) ); // 500 Internal Server Error (by default)
   }
-})
-
+);
 
 // GET '/auth/logout'
-router.get('/logout', isLoggedIn, (req, res, next) => {
+router.get("/logout", isLoggedIn, (req, res, next) => {
   req.session.destroy(function (err) {
     if (err) next(createError(err));
     else {
@@ -82,17 +88,25 @@ router.get('/logout', isLoggedIn, (req, res, next) => {
         .status(204) // No Content
         .send();
     }
-
-
-  })
-})
-
+  });
+});
 
 // GET '/auth/me'
-router.get('/me', isLoggedIn, (req, res, next) => {
+router.get("/me", isLoggedIn, (req, res, next) => {
   const currentUserData = req.session.currentUser;
 
   res.status(200).json(currentUserData);
-})
+});
+
+// GET new route
+router.get("/update/:id", (req, res, next) => {
+  const { id } = req.params;
+
+  User.findById(id)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => console.log(err));
+});
 
 module.exports = router;

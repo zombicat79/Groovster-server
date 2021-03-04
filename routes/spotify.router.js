@@ -18,7 +18,7 @@ spotifyApi
     console.log("Something went wrong when retrieving an access token", error)
   );
 
-// Main - input form
+// Main - input form - Search Artist
 router.post("/main", (req, res, next) => {
   const { search } = req.body;
   spotifyApi
@@ -31,50 +31,66 @@ router.post("/main", (req, res, next) => {
     );
 });
 
-// Main - if no preferences set
-router.post("/main/no-preferences", (req, res, next) => {
-  spotifyApi
-    .getArtistRelatedArtists("7jy3rLJdDQY21OgRLCZ9sD")
-    .then(function (data) {
-      console.log(data.body);
-      res.status(201).json(data);
-    })
-    .catch((error) =>
-      console.log("Something went wrong when retrieving an access token", error)
-    );
-});
-
-// Main - if only one preference
-router.post("/main/one-preference", (req, res, next) => {
-  // const id = req.session.currentUser
-
-  // User.findById(id)
-
-  spotifyApi
-    .getArtistRelatedArtists("7jy3rLJdDQY21OgRLCZ9sD")
-    .then(function (data) {
-      console.log(data.body);
-      res.status(201).json(data);
-    })
-    .catch((error) =>
-      console.log("Something went wrong when retrieving an access token", error)
-    );
-});
-
-// Main - get user's preferences.
-// router.get("/user", (req, res, next) => {
-//   const id = req.session
-
-//   console.log("thiiiiiiiis", id);
+// Main - Get One Artist
+router.post("/main/singleArtist", (req, res, next) => {
+  const { userPref } = req.body;
+  console.log(userPref);
   
 
-//   User.findById(id)
-//     .then((data) => {
-//         console.log(data);
+  spotifyApi
+    .getArtist(userPref)
+    .then((data) => {
+        console.log(data);
+        res.status(201).json(data)
         
-//       res.status(201).json(data);
-//     })
-//     .catch((err) => console.log('this is where it fucks up', err));
-// });
+    })
+    .catch((err) => console.log(err));
+});
+
+// Main - Get Related Artists (if no preferences set)
+router.get("/main/no-preferences", (req, res, next) => {
+  spotifyApi
+    .getArtistRelatedArtists("7jy3rLJdDQY21OgRLCZ9sD")
+    .then(function (data) {
+      console.log(data.body);
+      res.status(201).json(data.body);
+    })
+    .catch((error) =>
+      console.log("Something went wrong when retrieving an access token", error)
+    );
+});
+
+// Main - Get Related Artist (Based on user preference)
+router.post("/main/one-preference", (req, res, next) => {
+  const { userPref } = req.body;
+
+  spotifyApi
+    .getArtistRelatedArtists(userPref)
+    .then(function (data) {
+      console.log(data.body);
+      res.status(201).json(data);
+    })
+    .catch((error) =>
+      console.log("Something went wrong when retrieving an access token", error)
+    );
+});
+
+// Main - Get Several Artists
+router.post("/main/preferences", (req, res, next) => {
+    console.log(req.body.artistsArr);
+    
+  const userPref = req.body.artistsArr;
+  console.log("this?", userPref);
+
+  spotifyApi
+    .getArtists(userPref)
+    .then(function (data) {
+      console.log(data.body);
+      res.status(201).json(data);
+    })
+    .catch((error) =>
+      console.log("Something went wrong when retrieving an access token", error)
+    );
+});
 
 module.exports = router;
