@@ -9,6 +9,26 @@ const {
 
 const User = require("./../models/user.model");
 
+// GET ALL USERS
+router.get("/", isLoggedIn, (req, res, next) => {
+    User.find()
+    .then( (allUsers) => {
+        res.status(200).json(allUsers);
+    })
+    .catch( (err) => next(err));
+})
+
+//GET USERS BY SEARCH
+router.get("/:search", isLoggedIn, (req, res, next) => {
+    const {search} = req.params
+
+    User.find({username: search})
+    .then( (matchingUsers) => {
+        res.status(200).json(matchingUsers);
+    })
+    .catch( (err) => next(err));
+})
+
 // GET '/api/users/:id'
 router.get("/:id", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
