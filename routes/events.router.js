@@ -22,9 +22,9 @@ router.get('/:artistId', (req, res, next) => {
 // CREATE NEW EVENT
 router.post('/:artistId/create', (req, res, next) => {
     const { artistId } = req.params;
-    const { title, description, date } = req.body
+    const { creator, title, description, date, participants } = req.body
     
-    Event.create({artist: artistId, title, description, date})
+    Event.create({creator, artist: artistId, title, description, date, participants: [creator, ...participants]})
     .then( (createdEvent) => {
         res
         .status(200)

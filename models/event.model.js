@@ -6,8 +6,8 @@ const eventSchema = new Schema({
     title: {type: String, required: true, unique: true}, 
     description: {type: String, required: true}, 
     date: {type: String, required: true}, 
-    participants: [{type: Schema.Types.ObjectId,ref:'User'}],
-    creator: [{type: Schema.Types.ObjectId,ref:'User'}]
+    participants: [{type: Schema.Types.ObjectId, ref:'User'}],
+    creator: {type: Schema.Types.ObjectId, ref:'User'}
   }, 
 );
 

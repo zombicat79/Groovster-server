@@ -25,7 +25,7 @@ const {spotifyApi} = spotifyApiConfig;
 spotifyApiConfig.connect()
 
 // GET AN ARTIST
-router.get("/:artistId", (req, res, next) => {
+router.get("/artist/:artistId", (req, res, next) => {
   const { artistId } = req.params;
 
   spotifyApi
