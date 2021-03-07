@@ -2,27 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const User = require("./../models/user.model");
-const spotifyApiConfig = require('../configs/spotify-config');
-const {spotifyApi} = spotifyApiConfig;
+const spotifyApiConfig = require("../configs/spotify-config");
+const { spotifyApi } = spotifyApiConfig;
 
-// // setting the spotify-api goes here:
-// const spotifyApi = new SpotifyWebApi({
-//   clientId: process.env.CLIENT_ID,
-//   clientSecret: process.env.CLIENT_SECRET,
-// });
-
-// // Retrieve an access token
-// spotifyApi
-//   .clientCredentialsGrant()
-//   .then((data) => {
-//     spotifyApi.setAccessToken(data.body["access_token"]);
-//     spotifyApi.setRefreshToken(data.body['refresh_token']);
-//   })
-//   .catch((error) =>
-//     console.log("Something went wrong when retrieving an access token", error)
-//   );
-
-spotifyApiConfig.connect()
+spotifyApiConfig.connect();
 
 // GET AN ARTIST
 router.get("/artist/:artistId", (req, res, next) => {
@@ -33,9 +16,7 @@ router.get("/artist/:artistId", (req, res, next) => {
     .then((data) => {
       res.status(201).json(data);
     })
-    .catch((err) => {
-        
-    });
+    .catch((err) => {});
 });
 
 // Main - input form
@@ -62,7 +43,7 @@ router.post("/main/singleArtist", (req, res, next) => {
       console.log(data);
       res.status(201).json(data);
     })
-    .catch((err) => console.log('this is the catch', err));
+    .catch((err) => console.log("this is the catch", err));
 });
 
 // Main - Get Related Artists (if no preferences set)
@@ -95,11 +76,7 @@ router.post("/main/one-preference", (req, res, next) => {
 
 // Main - Get Several Artists
 router.post("/main/preferences", (req, res, next) => {
-  console.log(req.body.artistsArr);
-
   const userPref = req.body.artistsArr;
-  console.log("this?", userPref);
-
   spotifyApi
     .getArtists(userPref)
     .then(function (data) {
@@ -109,6 +86,45 @@ router.post("/main/preferences", (req, res, next) => {
     .catch((error) =>
       console.log("Something went wrong when retrieving an access token", error)
     );
+});
+
+// Artist Page - send Artist's album
+router.get("/artist/album/:id", (req, res, next) => {
+  const { id } = req.params;
+  spotifyApi.getArtistAlbums(id).then(
+    function (data) {
+      res.status(201).json(data);
+    },
+    function (err) {
+      console.error(err);
+    }
+  );
+});
+
+// Artist Page - get top tracks
+router.get("/artist/top-tracks/:id", (req, res, next) => {
+  const { id } = req.params;
+  spotifyApi.getArtistTopTracks(id, "ES").then(
+    function (data) {
+      res.status(201).json(data);
+    },
+    function (err) {
+      console.log("Something went wrong!", err);
+    }
+  );
+});
+
+// Album Page - get Tracks
+router.get("/artist/album/track/:id", (req, res, next) => {
+  const { id } = req.params;
+  spotifyApi.getAlbumTracks(id).then(
+    function (data) {
+      res.status(201).json(data);
+    },
+    function (err) {
+      console.log("Something went wrong!", err);
+    }
+  );
 });
 
 module.exports = router;
