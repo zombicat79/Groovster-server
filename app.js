@@ -13,6 +13,7 @@ const authRouter = require("./routes/auth.router");
 const usersRouter = require("./routes/users.router");
 const eventsRouter = require("./routes/events.router");
 const spotifyRouter = require('./routes/spotify.router');
+const chatRouter = require("./routes/chat.router");
 
 // MONGOOSE CONNECTION
 mongoose
@@ -51,9 +52,6 @@ app.use(
   })
 );
 
-
-
-
 // MIDDLEWARE
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -63,10 +61,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ROUTER MIDDLEWARE
 app.use("/auth", authRouter);
-
 app.use("/api/users", usersRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/spotify", spotifyRouter);
+app.use("/", chatRouter)
 
 
 // ERROR HANDLING
@@ -87,5 +85,6 @@ app.use((err, req, res, next) => {
     res.status(statusError).json(err);
   }
 });
+
 
 module.exports = app;
