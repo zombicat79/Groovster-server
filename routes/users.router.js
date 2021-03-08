@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fileUploader = require('../configs/cloudinary.config');
 
 const {
   isLoggedIn,
@@ -41,15 +42,13 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 });
 
 // PUT '/api/users/:id'
-router.put("/:id", isLoggedIn, (req, res, next) => {
-    
-  const { id } = req.params;
-//   const { username, email, preferences } = req.body;
+router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
+    const { id } = req.params;
 
-  User.findByIdAndUpdate(id, req.body)
+    User.findByIdAndUpdate(id, req.body)
     .then((selectedUser) => {
-      res.status(201).json(selectedUser);
-    })
+        res.status(201).json(selectedUser);
+        })
     .catch((err) => next(err));
 });
 
