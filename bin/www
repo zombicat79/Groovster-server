@@ -22,10 +22,11 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
+
+// Chat server
 const io = require("socket.io")(server, {
   transports: ["websocket", "polling"]
 });
-
 
 const users = {};
 io.on("connection", client => {
@@ -34,7 +35,6 @@ io.on("connection", client => {
       name: username,
       id: client.id
     };
-    
     users[client.id] = user;
     io.emit("connected", user);
     io.emit("users", Object.values(users));
