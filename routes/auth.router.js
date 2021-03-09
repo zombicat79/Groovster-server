@@ -21,8 +21,7 @@ router.post(
   validateAuthData,
   async (req, res, next) => {
     try {
-      const { username, password, email } = req.body;
-
+      const { username, password, email, image } = req.body;
       const user = await User.findOne({ username });
 
       if (user) {
@@ -36,6 +35,7 @@ router.post(
         username,
         password: hashPass,
         email,
+        image
       });
 
       newUser.password = "*";

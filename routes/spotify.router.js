@@ -10,6 +10,7 @@ spotifyApiConfig.connect();
 // GET AN ARTIST
 router.get("/artist/:artistId", (req, res, next) => {
   const { artistId } = req.params;
+  console.log(artistId)
 
   spotifyApi
     .getArtist(artistId)

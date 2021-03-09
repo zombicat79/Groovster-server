@@ -20,8 +20,8 @@ router.get("/", isLoggedIn, (req, res, next) => {
 })
 
 //GET USERS BY SEARCH
-router.get("/:search", isLoggedIn, (req, res, next) => {
-    const {search} = req.params
+router.get("/search/:search", isLoggedIn, (req, res, next) => {
+    const {search} = req.params;
 
     User.find({username: search})
     .then( (matchingUsers) => {
@@ -51,6 +51,19 @@ router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) =>
         })
     .catch((err) => next(err));
 });
+
+
+// POST '/api/users/photo'
+router.post("/photo", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
+
+    if (!req.file) {
+        return next(createError('No file uploaded'))
+    }
+
+    res.json({ imageUrl: req.file.path })
+});
+
+
 
 // PUT '/api/users/:id'
 // router.put("/update/pref/:preferences", isLoggedIn, (req, res, next) => {
