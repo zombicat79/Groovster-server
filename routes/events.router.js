@@ -34,7 +34,7 @@ router.get("/one-event/:eventId", (req, res, next) => {
 // CREATE NEW EVENT
 router.post("/:artistId/create", (req, res, next) => {
   const { artistId } = req.params;
-  const { creator, title, description, date, participants, location } = req.body;
+  const { creator, title, description, date, participants, picture, location } = req.body;
 
   Event.create({
     creator,
@@ -42,6 +42,7 @@ router.post("/:artistId/create", (req, res, next) => {
     title,
     description,
     date,
+    picture,
     participants: [creator, ...participants],
     location,
   })

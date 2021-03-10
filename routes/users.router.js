@@ -26,7 +26,7 @@ router.get("/search/:search", isLoggedIn, (req, res, next) => {
 
     User.find({username: search})
     .then( (matchingUsers) => {
-        res.status(200).json(matchingUsers);
+      res.status(200).json(matchingUsers);
     })
     .catch( (err) => next(err));
 })
@@ -77,14 +77,14 @@ router.put("/settings/:id", isLoggedIn, fileUploader.single('image'), (req, res,
     .then((salt) => {
       console.log(salt)
       bcrypt.hash(password, salt)
-    })
-    .then((hashPass) => {
+      })
+      .then((hashPass) => {
       console.log(hashPass)
       User.findByIdAndUpdate(id, {password: hashPass})
-    })
-    .then((modifiedUser) => {
+      })
+      .then((modifiedUser) => {
       res.status(201).json(modifiedUser);
-    })
+      })
     .catch((err) => next(err));
   }
 
@@ -93,7 +93,7 @@ router.put("/settings/:id", isLoggedIn, fileUploader.single('image'), (req, res,
     .then((selectedUser) => {
       res.status(201).json(selectedUser);
       })
-    .catch((err) => next(err));
+    .catch((err) => next(err)); 
   }
 });
 
