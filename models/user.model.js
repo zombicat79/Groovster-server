@@ -9,6 +9,7 @@ const userSchema = new Schema(
     image: String,
     preferences: [{ type: String }],
     events: [{ type: Schema.Types.ObjectId, ref: "Event" }],
+    chat: {type: String}
   },
   {
     timestamps: {

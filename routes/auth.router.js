@@ -104,7 +104,7 @@ router.get("/update/:id", (req, res, next) => {
 
   User.findById(id)
     .then((data) => {
-      res.status(200).json(data);
+    res.status(200).json(data);
     })
     .catch((err) => console.log(err));
 });

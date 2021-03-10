@@ -41,6 +41,17 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// PUT 'api/users/:id/:chatId'
+router.put("/:id/:chat", (req, res, next) =>{
+  const {id, chat} = req.params; 
+
+  User.findByIdAndUpdate(id, {chat})
+  .then((selectedUser) => {
+      res.status(201).json(selectedUser);
+      })
+  .catch((err) => next(err));
+})
+
 // PUT '/api/users/:id'
 router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
     const { id } = req.params;
