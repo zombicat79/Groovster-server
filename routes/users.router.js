@@ -41,6 +41,17 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// PUT 'api/users/:id/:chatId'
+router.put("/:id/:chat", (req, res, next) =>{
+  const {id, chat} = req.params; 
+
+  User.findByIdAndUpdate(id, {chat})
+  .then((selectedUser) => {
+      res.status(201).json(selectedUser);
+      })
+  .catch((err) => next(err));
+})
+
 // PUT '/api/users/:id'
 router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
     const { id } = req.params;
@@ -51,18 +62,6 @@ router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) =>
         })
     .catch((err) => next(err));
 });
-
-// PUT '/api/users/:id'
-// router.put("/update/pref/:preferences", isLoggedIn, (req, res, next) => {
-//   const { preferences } = req.params;
-//   const { user } = req.body;
-
-//   User.findByIdAndUpdate(user, { preferences })
-//     .then((updatedUser) => {
-//         res.status(201).json(updatedUser)
-//     })
-//     .catch((err) => console.log(err));
-// });
 
 // DELETE '/api/users/:id'
 router.delete("/:id", isLoggedIn, (req, res, next) => {

@@ -44,11 +44,18 @@ io.on("connection", client => {
     io.emit("message", {
       text: message,
       date: new Date().toISOString(),
-      user: users[client.id]
+      user: users[client.id],
+      // chat: users
     });
   });
 
   client.on("disconnect", () => {
+    const username = users[client.id];
+    delete users[client.id];
+    io.emit("disconnected", client.id);
+  });
+
+  client.on("unmount", () => {
     const username = users[client.id];
     delete users[client.id];
     io.emit("disconnected", client.id);

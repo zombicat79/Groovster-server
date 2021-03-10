@@ -19,7 +19,7 @@ router.get("/artist/:artistId", (req, res, next) => {
     .catch((err) => {});
 });
 
-// Main - input form
+// Main - input form - searchArtists
 router.post("/main", (req, res, next) => {
   const { search } = req.body;
   spotifyApi
@@ -35,7 +35,6 @@ router.post("/main", (req, res, next) => {
 // Main - Get One Artist
 router.post("/main/singleArtist", (req, res, next) => {
   const { userPref } = req.body;
-  console.log(userPref);
 
   spotifyApi
     .getArtist(userPref)
@@ -76,7 +75,8 @@ router.post("/main/one-preference", (req, res, next) => {
 
 // Main - Get Several Artists
 router.post("/main/preferences", (req, res, next) => {
-  const userPref = req.body.artistsArr;
+  const userPref = req.body.userPref;
+  
   spotifyApi
     .getArtists(userPref)
     .then(function (data) {
@@ -125,6 +125,18 @@ router.get("/artist/album/track/:id", (req, res, next) => {
       console.log("Something went wrong!", err);
     }
   );
+});
+
+// Album Page - get Album
+router.get("/artist/one-album/:id", (req, res, next) => {
+  const { id } = req.params;
+  spotifyApi
+    .getAlbum(id)
+    .then((data) => {
+      console.log(data);
+      res.status(201).json(data);
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
