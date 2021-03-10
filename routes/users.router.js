@@ -56,33 +56,49 @@ router.put("/:id/:chat", (req, res, next) =>{
 // PUT '/api/users/:id'
 router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
     const { id } = req.params;
-    const { password } = req.body;
-    const { username, email, image } = req.body
-
-    if (password.length > 0) {
-      bcrypt.genSalt(10)
-      .then((salt) => {
-        console.log(salt)
-        bcrypt.hash(password, salt)
-      })
-      .then((hashPass) => {
-        console.log(hashPass)
-        User.findByIdAndUpdate(id, {password: hashPass})
-      })
-      .then((modifiedUser) => {
-        res.status(201).json(modifiedUser);
-      })
-      .catch((err) => next(err));
-    }
-
-    else {
+ 
       User.findByIdAndUpdate(id, req.body)
       .then((selectedUser) => {
         res.status(201).json(selectedUser);
         })
       .catch((err) => next(err));
-    }
+    
 });
+
+
+// Update Settings 
+router.put("/settings/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
+  const { id } = req.params;
+  const { password } = req.body;
+  const { username, email, image } = req.body
+
+  if (password.length > 0) {
+    bcrypt.genSalt(10)
+    .then((salt) => {
+      console.log(salt)
+      bcrypt.hash(password, salt)
+    })
+    .then((hashPass) => {
+      console.log(hashPass)
+      User.findByIdAndUpdate(id, {password: hashPass})
+    })
+    .then((modifiedUser) => {
+      res.status(201).json(modifiedUser);
+    })
+    .catch((err) => next(err));
+  }
+
+  else {
+    User.findByIdAndUpdate(id, req.body)
+    .then((selectedUser) => {
+      res.status(201).json(selectedUser);
+      })
+    .catch((err) => next(err));
+  }
+});
+
+
+
 
 
 // POST '/api/users/photo'
