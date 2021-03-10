@@ -34,7 +34,15 @@ router.get("/one-event/:eventId", (req, res, next) => {
 // CREATE NEW EVENT
 router.post("/:artistId/create", (req, res, next) => {
   const { artistId } = req.params;
-  const { creator, title, description, date, participants, picture, location } = req.body;
+  const {
+    creator,
+    title,
+    description,
+    date,
+    participants,
+    picture,
+    location,
+  } = req.body;
 
   Event.create({
     creator,
@@ -71,6 +79,22 @@ router.delete("/:eventId", (req, res, next) => {
   Event.findByIdAndRemove(eventId)
     .then(() => {
       res.status(202).send();
+    })
+    .catch((err) => next(err));
+});
+
+// Update Event
+router.put("/update/:id", (req, res, next) => {
+  const { eventId } = req.params;
+  const { changes } = req.body;
+  console.log(changes);
+  
+
+  Event.findByIdAndUpdate(eventId, { changes })
+    .then((updatedEvent) => {
+        console.log(updatedEvent);
+        
+      res.status(202).json(updatedEvent);
     })
     .catch((err) => next(err));
 });
