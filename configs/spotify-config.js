@@ -2,7 +2,6 @@ require("dotenv").config();
 const SpotifyWebApi = require("spotify-web-api-node");
 
 class SpotifyAPIConfig {
-  // setting the spotify-api goes here:
   constructor() {
     this.spotifyApi = new SpotifyWebApi({
       clientId: process.env.CLIENT_ID,
