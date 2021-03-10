@@ -32,7 +32,10 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.PUBLIC_DOMAIN],
+    origin: [
+      process.env.PUBLIC_DOMAIN,
+    'http://groovster.herokuapp.com',         
+    'https://groovster.herokuapp.com']
   })
 );
 
@@ -65,6 +68,13 @@ app.use("/api/users", usersRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/spotify", spotifyRouter);
 app.use("/", chatRouter)
+
+
+// ROUTE FOR SERVING REACT APP (index.html)
+app.use((req, res, next) => {
+  // If no previous routes match the request, send back the React app.
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 
 // ERROR HANDLING
