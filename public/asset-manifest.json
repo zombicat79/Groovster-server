@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.7a33706d.chunk.css",
-    "main.js": "/static/js/main.9f67fb55.chunk.js",
-    "main.js.map": "/static/js/main.9f67fb55.chunk.js.map",
+    "main.css": "/static/css/main.5ee64a0e.chunk.css",
+    "main.js": "/static/js/main.e40bf701.chunk.js",
+    "main.js.map": "/static/js/main.e40bf701.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.bb2b6098.js",
     "runtime-main.js.map": "/static/js/runtime-main.bb2b6098.js.map",
     "static/js/2.7edf8c3a.chunk.js": "/static/js/2.7edf8c3a.chunk.js",
     "static/js/2.7edf8c3a.chunk.js.map": "/static/js/2.7edf8c3a.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.7a33706d.chunk.css.map": "/static/css/main.7a33706d.chunk.css.map",
+    "static/css/main.5ee64a0e.chunk.css.map": "/static/css/main.5ee64a0e.chunk.css.map",
     "static/js/2.7edf8c3a.chunk.js.LICENSE.txt": "/static/js/2.7edf8c3a.chunk.js.LICENSE.txt",
     "static/media/clement-dark.3787da47.png": "/static/media/clement-dark.3787da47.png",
     "static/media/clement-light.7299b06d.png": "/static/media/clement-light.7299b06d.png",
@@ -22,7 +22,7 @@
   "entrypoints": [
     "static/js/runtime-main.bb2b6098.js",
     "static/js/2.7edf8c3a.chunk.js",
-    "static/css/main.7a33706d.chunk.css",
-    "static/js/main.9f67fb55.chunk.js"
+    "static/css/main.5ee64a0e.chunk.css",
+    "static/js/main.e40bf701.chunk.js"
   ]
 }
