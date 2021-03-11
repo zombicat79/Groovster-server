@@ -36,10 +36,43 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
 
   User.findById(id)
+    .populate("events")
     .then((selectedUser) => {
       res.status(200).json(selectedUser);
     })
     .catch((err) => next(err));
+});
+
+// Update Settings 
+router.put("/settings/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
+  const { id } = req.params;
+  const { password } = req.body;
+  const { username, email, image } = req.body
+
+  if (password.length > 0) {
+    bcrypt.genSalt(10)
+    .then((salt) => {
+      console.log(salt)
+      bcrypt.hash(password, salt)
+      .then((hashPass) => {
+        console.log(hashPass)
+        User.findByIdAndUpdate(id, {password: hashPass, username, email, image})
+        .then((modifiedUser) => {
+          res.status(201).json(modifiedUser)
+       })
+      })
+    })
+    .catch((err) => next(err));
+  }
+
+  else {
+    console.log(req.body)
+    User.findByIdAndUpdate(id, {username, email, image})
+    .then((selectedUser) => {
+      res.status(201).json(selectedUser);
+      })
+    .catch((err) => next(err)); 
+  }
 });
 
 // PUT 'api/users/:id/:chatId'
@@ -55,51 +88,15 @@ router.put("/:id/:chat", (req, res, next) =>{
 
 // PUT '/api/users/:id'
 router.put("/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
-    const { id } = req.params;
- 
-      User.findByIdAndUpdate(id, req.body)
-      .then((selectedUser) => {
-        res.status(201).json(selectedUser);
-        })
-      .catch((err) => next(err));
-    
-});
-
-
-// Update Settings 
-router.put("/settings/:id", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
   const { id } = req.params;
-  const { password } = req.body;
-  const { username, email, image } = req.body
 
-  if (password.length > 0) {
-    bcrypt.genSalt(10)
-    .then((salt) => {
-      console.log(salt)
-      bcrypt.hash(password, salt)
-      })
-      .then((hashPass) => {
-      console.log(hashPass)
-      User.findByIdAndUpdate(id, {password: hashPass})
-      })
-      .then((modifiedUser) => {
-      res.status(201).json(modifiedUser);
-      })
-    .catch((err) => next(err));
-  }
-
-  else {
     User.findByIdAndUpdate(id, req.body)
     .then((selectedUser) => {
       res.status(201).json(selectedUser);
       })
-    .catch((err) => next(err)); 
-  }
+    .catch((err) => next(err));
+  
 });
-
-
-
-
 
 // POST '/api/users/photo'
 router.post("/photo", isLoggedIn, fileUploader.single('image'), (req, res, next) => {
@@ -110,20 +107,6 @@ router.post("/photo", isLoggedIn, fileUploader.single('image'), (req, res, next)
 
     res.json({ imageUrl: req.file.path })
 });
-
-
-
-// PUT '/api/users/:id'
-// router.put("/update/pref/:preferences", isLoggedIn, (req, res, next) => {
-//   const { preferences } = req.params;
-//   const { user } = req.body;
-
-//   User.findByIdAndUpdate(user, { preferences })
-//     .then((updatedUser) => {
-//         res.status(201).json(updatedUser)
-//     })
-//     .catch((err) => console.log(err));
-// });
 
 // DELETE '/api/users/:id'
 router.delete("/:id", isLoggedIn, (req, res, next) => {
