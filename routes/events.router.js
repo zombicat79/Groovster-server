@@ -24,6 +24,7 @@ router.get("/one-event/:eventId", (req, res, next) => {
   const { eventId } = req.params;
 
   Event.findById(eventId)
+    .populate("participants")
     .then((event) => {
       console.log("working", event);
       res.status(200).json(event);
