@@ -40,12 +40,20 @@ io.on("connection", client => {
     io.emit("users", Object.values(users));
   });
 
+  // client.on("send", ({message, chatId}) => {
+  //   io.emit("message", {
+  //     text: message,
+  //     date: new Date().toISOString(),
+  //     user: users[client.id],
+  //     chatfez: chatId
+  //   });
+  // });
+
   client.on("send", message => {
     io.emit("message", {
       text: message,
       date: new Date().toISOString(),
-      user: users[client.id],
-      // chat: users
+      user: users[client.id]
     });
   });
 
