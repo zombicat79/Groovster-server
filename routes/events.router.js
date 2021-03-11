@@ -86,16 +86,13 @@ router.delete("/:eventId", (req, res, next) => {
 
 // Update Event
 router.put("/update/:id", (req, res, next) => {
-  const { eventId } = req.params;
-  const { changes } = req.body;
-  console.log(changes);
+  const { id } = req.params;
   
 
-  Event.findByIdAndUpdate(eventId, { changes })
+  Event.findByIdAndUpdate(id, req.body)
     .then((updatedEvent) => {
-        console.log(updatedEvent);
-        
-      res.status(202).json(updatedEvent);
+      console.log(updatedEvent);
+      res.status(201).json(updatedEvent);
     })
     .catch((err) => next(err));
 });
