@@ -41,12 +41,13 @@ io.on("connection", client => {
   });
 
   // SEND WITH CHAT ID
-  client.on("send", ({message, chatId}) => {
+  client.on("send", ({message, userChatId}) => {
+    console.log("message send");
     io.emit("message", {
       text: message,
       date: new Date().toISOString(),
       user: users[client.id],
-      chatfez: chatId
+      userChatIdMessage: userChatId
     });
   });
 
